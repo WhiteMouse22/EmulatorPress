@@ -13,4 +13,11 @@ namespace EmulatorPress
         public double Value { get; set; }
 
     }
+    public enum SignalType
+    {
+        Constant,
+        Randoms,
+        Step,
+        NegativeStep
+    }
 }

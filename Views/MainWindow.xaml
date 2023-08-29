@@ -13,8 +13,8 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="s:TooltipControl">
-                        <Border Background="#ff6495ed"
-                                BorderBrush="#ff87B1FA"
+                        <Border Background="Gray"
+                                BorderBrush="Gray"
                                 BorderThickness="2"
                                 CornerRadius="15"
                                 Opacity="0.9"
@@ -58,12 +58,15 @@
             <StackPanel Orientation="Vertical" Margin="10">
                 <RadioButton Content="Постоянное давление" IsChecked="{Binding IsConstant}"/>
                 <RadioButton Content="Случайное давление" IsChecked="{Binding IsRandoms}"/>
-                <RadioButton Content="Рост" IsChecked="{Binding IsStep}"/>
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton Content="Рост  /  " IsChecked="{Binding IsStep}"/>
                 <RadioButton Content="Падение" IsChecked="{Binding IsNegativeStep}"/>
+                </StackPanel>
+                
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="10" VerticalAlignment="Center">
-                <TextBlock Text="Значение" HorizontalAlignment="Center"/>
-                <TextBox Text="{Binding Value}" Width="70"/>
+                <TextBlock Text="Значение, усл.ед." HorizontalAlignment="Center"/>
+                <TextBox Text="{Binding Value}" Width="100"/>
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">

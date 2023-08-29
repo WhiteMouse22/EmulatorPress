@@ -58,7 +58,7 @@ namespace EmulatorPress
             }
         }
         #endregion
-        #region Value
+        #region Значение давления из настроек
         private double _value;
         public double Value
         {
@@ -73,7 +73,7 @@ namespace EmulatorPress
             }
         }
         #endregion
-        #region IsStopEnabled
+        #region Блокировка кнопки Stop
         private bool _isStopEnabled=false;
         public bool IsStopEnabled
         {
@@ -85,18 +85,7 @@ namespace EmulatorPress
             }
         }
         #endregion
-        #region IsStartEnabled
-        private bool _isStartEnabled = true;
-        public bool IsStartEnabled
-        {
-            get { return _isStartEnabled; }
-            set
-            {
-                _isStartEnabled = value;
-                OnPropertyChanged(nameof(IsStartEnabled));
-            }
-        }
-        #endregion
+
         #region Тип сигнала
         SignalType _signalType = SignalType.Constant;
 
@@ -116,7 +105,7 @@ namespace EmulatorPress
                 OnPropertyChanged(nameof(IsNegativeStep));
                 OnPropertyChanged(nameof(Value));
                 OnPropertyChanged(nameof(GetResult));
-                _dummyDataProvider.SignalType = value;
+                _dummyDataProvider._signalType = value;
                 SaveSetting();
             }
         }
@@ -177,7 +166,7 @@ namespace EmulatorPress
         private void PerformOnEmulation()
         {
             SaveSetting();
-            _dummyDataProvider.SignalType = _signalType;
+            _dummyDataProvider._signalType = _signalType;
             _dummyDataProvider.Value = _value;
             _dummyDataProvider.Timer.Start();
             _isStopEnabled = true;
@@ -199,9 +188,7 @@ namespace EmulatorPress
         {
             _dummyDataProvider.Timer.Stop();
             _isStopEnabled = false;
-            _isStartEnabled = true;
             OnPropertyChanged(nameof(IsStopEnabled));
-            OnPropertyChanged(nameof(IsStartEnabled));
         }
         #endregion
         #region Очистка графика
@@ -218,7 +205,6 @@ namespace EmulatorPress
         private void PerformClearChart()
         {
             lineData.Clear();
-            LoadNewChart();
         }
         #endregion
 
@@ -241,12 +227,6 @@ namespace EmulatorPress
                 lineData.InvalidateParentSurface(RangeMode.ZoomToFit);// Масштабирование диаграммы по размеру
             });
         }
-
-        private void LoadNewChart()
-        {
-
-        }
-
         private void SaveSetting()
         {
             using (var db = new LiteDatabase(@"SettingDB.db"))

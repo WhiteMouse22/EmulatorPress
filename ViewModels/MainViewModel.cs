@@ -14,7 +14,7 @@ namespace EmulatorPress
     public class MainViewModel : BindableObject
     {
         private readonly DummyDataProvider _dummyDataProvider = new DummyDataProvider();
-        private XyDataSeries<double, double> lineData = new XyDataSeries<double, double> { SeriesName = "Давление испытания" };
+        private XyDataSeries<TimeSpan, double> lineData = new XyDataSeries<TimeSpan, double> { SeriesName = "Давление испытания" };
 
         #region _renderableSeries // отрисовывает график
         private ObservableCollection<IRenderableSeriesViewModel> _renderableSeries;
@@ -220,10 +220,10 @@ namespace EmulatorPress
                 StyleKey = "LineSeriesStyle"
             });
 
-            lineData.Append(0, 0); //начальная точка
+            lineData.Append(TimeSpan.FromSeconds(0), 0); //начальная точка
             _dummyDataProvider.SubscribeUpdates((newValues) =>
             {
-                lineData.Append(newValues.XValue, newValues.YValue);
+                lineData.Append(newValues.XValues, newValues.YValues);
                 lineData.InvalidateParentSurface(RangeMode.ZoomToFit);// Масштабирование диаграммы по размеру
             });
         }

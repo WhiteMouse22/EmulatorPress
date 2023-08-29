@@ -88,7 +88,7 @@
             </s:SciChartSurface.ChartModifier>
 
             <s:SciChartSurface.XAxis>
-                <s:NumericAxis AxisTitle="Время"/>
+                <s:TimeSpanAxis AxisTitle="Время"/>
             </s:SciChartSurface.XAxis>
             <s:SciChartSurface.YAxis>
                 <s:NumericAxis AxisTitle="Давление"/>

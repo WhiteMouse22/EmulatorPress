@@ -31,7 +31,7 @@ namespace EmulatorPress
             bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
             if (designMode) return;
 
-            Timer.Interval = TimeSpan.FromMilliseconds(100); //шаг 0.5 сек
+            Timer.Interval = TimeSpan.FromMilliseconds(100); //шаг 0.1 сек
             Timer.Tick += (s, e) =>
             {
                 var xyValues = GenerateRandomWalk(); // генерируем новые координаты

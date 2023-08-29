@@ -1,0 +1,95 @@
+﻿<Window x:Class="EmulatorPress.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:l="clr-namespace:EmulatorPress"
+        xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+        mc:Ignorable="d"
+        Title="Эмуляция давления" Height="650" Width="1000" Background="DarkGray" WindowStyle="ThreeDBorderWindow">
+    <Window.Resources>
+        <l:MainViewModel x:Key="MainViewModel"/>
+        <Style x:Key="TooltipContainer" TargetType="s:TooltipControl">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="s:TooltipControl">
+                        <Border Background="#ff6495ed"
+                                BorderBrush="#ff87B1FA"
+                                BorderThickness="2"
+                                CornerRadius="15"
+                                Opacity="0.9"
+                                Padding="5">
+                            <ContentPresenter Content="{TemplateBinding DataContext}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Шаблон подсказки для XyDataSeries, привязанный к XySeriesInfo -->
+        <DataTemplate x:Key="TooltipTemplate" DataType="s:XySeriesInfo">
+            <TextBlock Foreground="White">
+                  <Run Text="Давление: "/>
+                  <Run Text="{Binding FormattedYValue, Mode=OneWay}"/>
+            </TextBlock>
+
+        </DataTemplate>
+        <Style TargetType="s:BaseRenderableSeries"  x:Key="LineSeriesStyle">
+            <Setter Property="s:RolloverModifier.TooltipContainerStyle" Value="{StaticResource TooltipContainer}"/>
+            <Setter Property="s:RolloverModifier.TooltipTemplate" Value="{StaticResource TooltipTemplate}"/>
+            <Setter Property="s:RolloverModifier.IncludeSeries" Value="True"/>
+            <Setter Property="StrokeThickness" Value="2"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid DataContext="{StaticResource MainViewModel}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="90"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <CheckBox Margin="5" Foreground="#FFF" Content="Увеличить/уменьшить" IsChecked="{Binding EnableZoom, Mode=TwoWay}" VerticalAlignment="Center"/>
+            <CheckBox Margin="5" Foreground="#FFF" Content="Перетащить" IsChecked="{Binding EnablePan, Mode=TwoWay}" VerticalAlignment="Center"/>
+            <Button Content="Старт" Command="{Binding OnEmulation}" MinWidth="40" Width="100" Height="30" Margin="10" IsEnabled="{Binding IsStartEnabled}"/>
+            <Button Content="Стоп" Command="{Binding OffEmulation}" MinWidth="40" Width="100" Height="30" Margin="10" IsEnabled="{Binding IsStopEnabled}"/>
+            <Button Content="Очистить" Command="{Binding ClearChart}" MinWidth="50" Width="100" Height="30" Margin="10"/>
+            <StackPanel Orientation="Vertical" Margin="10">
+                <RadioButton Content="Постоянное давление" IsChecked="{Binding IsConstant}"/>
+                <RadioButton Content="Случайное давление" IsChecked="{Binding IsRandoms}"/>
+                <RadioButton Content="Рост" IsChecked="{Binding IsStep}"/>
+                <RadioButton Content="Падение" IsChecked="{Binding IsNegativeStep}"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="10" VerticalAlignment="Center">
+                <TextBlock Text="Значение" HorizontalAlignment="Center"/>
+                <TextBox Text="{Binding Value}" Width="70"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+            
+        </StackPanel>
+
+        <s:SciChartSurface Grid.Row="1"
+                           RenderableSeries="{s:SeriesBinding RenderableSeries}"
+                           ChartTitle="{Binding GetResult}">
+
+            <s:SciChartSurface.ChartModifier>
+                <s:ModifierGroup>
+                    <s:RubberBandXyZoomModifier IsEnabled="{Binding EnableZoom}" />
+                    <s:ZoomPanModifier IsEnabled="{Binding EnablePan}" ClipModeX="None" />
+                    <s:ZoomExtentsModifier/>
+                    <s:LegendModifier ShowLegend="True" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                    <s:RolloverModifier ShowTooltipOn="MouseHover"/>
+                </s:ModifierGroup>
+            </s:SciChartSurface.ChartModifier>
+
+            <s:SciChartSurface.XAxis>
+                <s:NumericAxis AxisTitle="Время"/>
+            </s:SciChartSurface.XAxis>
+            <s:SciChartSurface.YAxis>
+                <s:NumericAxis AxisTitle="Давление"/>
+            </s:SciChartSurface.YAxis>
+        </s:SciChartSurface>
+    </Grid>
+</Window>

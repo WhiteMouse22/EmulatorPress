@@ -56,16 +56,17 @@ namespace EmulatorPress
                 int shag = _interval / speed;
                 if (_signalType == SignalType.Constant) // режим постоянного давления
                 {
-                    _last = _next + Value / 5;
-                    _next = (_last < Value) ? _last : Value;
+                    _next = Value;
                 }
                 else if (_signalType == SignalType.Randoms) // режим случайного давления
                 {
-
-                    step = _random.NextDouble() + _random.Next(-(int)Value / 4, (int)Value / 4);
+                    if (Value < 5) 
+                        step = _random.NextDouble() * _random.Next(-10, 10) / 10;
+                    else
+                        step = Math.Round(_random.NextDouble() * _random.Next(-(int)Value, (int)Value), 2);
                     _last = _next + step;
-                    if (_last > Value) _last = Value;
-                    else if (_last < 0) _last = 0;
+                    if (_last > Value) { _last = Value; }
+                    else if (_last < 0) { _last = 0; }
                     _next = _last;
                 }
                 else // режимы роста и падения
